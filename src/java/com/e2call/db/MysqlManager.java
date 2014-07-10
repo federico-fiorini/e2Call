@@ -24,7 +24,7 @@ public class MysqlManager implements Serializable {
         } catch (Exception e) {
             throw new RuntimeException(e.toString(), e);
         }
-        conn = DriverManager.getConnection(dburl,username,password);
+        conn = DriverManager.getConnection(dburl,username,password);        
         return conn;
     }
 }

@@ -17,7 +17,7 @@ import java.util.logging.*;
  * http://localhost:8080/com.e2call/api/v1/status
  * @author FEDE
  */
-@Path("/v1/status")
+@Path("/status")
 public class V1_status {
     
     private static final String api_version = "1";
@@ -60,7 +60,7 @@ public class V1_status {
                     "<p>Database Date/Time return: "+myString+"</p>";
         }
         catch(Exception e){
-            Logger.getLogger(MysqlManager.class.getName()).log(Level.SEVERE, null, e);
+            return "Error occurred!";
         }
         finally{
             if(conn != null) conn.close();
