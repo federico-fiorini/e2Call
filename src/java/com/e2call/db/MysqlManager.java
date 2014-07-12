@@ -17,13 +17,11 @@ public class MysqlManager implements Serializable {
     public static Connection GetMysqlConn() throws Exception {
                 
         try {
-            if(conn != null){
-                return conn;
-            }
             Class.forName("com.mysql.jdbc.Driver");
         } catch (Exception e) {
             throw new RuntimeException(e.toString(), e);
         }
+
         conn = DriverManager.getConnection(dburl,username,password);        
         return conn;
     }

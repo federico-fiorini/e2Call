@@ -5,11 +5,12 @@ import javax.ws.rs.core.*;
 import java.sql.*;
 import com.e2call.db.*;
 import com.e2call.util.GPS;
+import java.util.ArrayList;
 /**
  *
  * @author FEDE
  */
-@Path("/context")
+@Path("V1/context")
 public class V1_context {
     
     /**
@@ -22,16 +23,12 @@ public class V1_context {
     public String updateAllContext() throws SQLException{
         
         PreparedStatement query = null;
-        String log_id = null;
-        Double latitude = null;
-        Double longitude = null;
-        Double altitude = null;
-        GPS gps = null;
+        ArrayList<String> log_ids = new ArrayList<String>();
         String returnMessage = null;
         Connection conn = null;
         int count = 0;
         int errors = 0;
-        boolean no_error = true;
+        String status = "";
         
         try{
             conn = MysqlManager.GetMysqlConn();
@@ -39,23 +36,24 @@ public class V1_context {
                                         + "FROM VehicleData "
                                         + "WHERE vehicleSegmentID IS NULL");//select all car log without context
             ResultSet rs = query.executeQuery();
-            
+                        
             while(rs.next()){
-                log_id = rs.getString("vehicleDataID");
-                latitude = rs.getDouble("latGPS");
-                longitude = rs.getDouble("lonGPS");
-                altitude = rs.getDouble("heightGPS");
-                gps = new GPS(latitude, longitude, altitude);
-                no_error = VechicleData.updateContext(log_id, gps);//for everyone call the updateContext method
-                if (no_error) count+=1; else errors+=1;
-            }
-            
+                log_ids.add(rs.getString("vehicleDataID"));
+            }            
             query.close(); //close connection
+            rs.close();
+            conn.close();
+            
+            for(int i = 0; i<log_ids.size(); i++){
+                status = VehicleData.updateContext(log_ids.get(i));//for everyone call the updateContext method
+                if (status.equals("Ok")) count+=1; else errors+=1;
+            }
             
             returnMessage = "<p>Updated " + count + " logs, with " + errors+" errors.</p>";
         }
-        catch(Exception e){            
-            return "Error occurred!";
+        catch(Exception e){
+            e.printStackTrace();
+            return "<p>Updated " + count + " logs, but then Error occurred: " + status;
         }
         finally{
             if(conn != null) conn.close();
@@ -74,12 +72,11 @@ public class V1_context {
     @Produces(MediaType.TEXT_HTML)
     public String updateContext(@PathParam("log_id") String log_id) throws SQLException{
         
-        GPS gps = null;
-        boolean no_error = true;
+        String status;
         
-        no_error = VechicleData.updateContext(log_id, gps);//call updateContext method
-        if (no_error) return "<p>Updated log with id " + log_id + ".</p>";
-        else return "<p>Not updated, error occurred! Check if the inserted id is correct.</p>";
+        status = VehicleData.updateContext(log_id);//call updateContext method
+        if (status.equals("Ok")) return "<p>Updated log with id " + log_id + ".</p>";
+        else return status;
         
     }
 }

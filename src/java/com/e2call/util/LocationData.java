@@ -25,9 +25,11 @@ public class LocationData {
     private String municipality;
     private String city; 
     private String roadName;
+    private boolean valid;
     
     public LocationData(GPS gps){
         this.gps = gps;
+        this.valid = true;
     }
     
     /**
@@ -53,6 +55,11 @@ public class LocationData {
 
             //get the root element
             Element docEle = dom.getDocumentElement();
+            String status = XMLParser.getTextValue(docEle,"status");
+            if (status.equals("OVER_QUERY_LIMIT")) {
+                this.valid = false;
+                return;
+            }
 
             //get a nodelist of  elements
             NodeList nl_res = docEle.getElementsByTagName("result");
@@ -77,7 +84,7 @@ public class LocationData {
                                 if(addr_type.equals("country")) country = XMLParser.getTextValue(addr,"long_name");
                             }
                             if (city == null) city = municipality;
-                        }                        
+                        }
                         break;
                     }
                 }
@@ -138,5 +145,12 @@ public class LocationData {
      */
     public String getRoadName() {
         return roadName;
+    }
+    
+    /**
+     * @return the valid value
+     */
+    public boolean isValid() {
+        return valid;
     }
 }

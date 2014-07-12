@@ -17,7 +17,7 @@ import java.util.logging.*;
  * http://localhost:8080/com.e2call/api/v1/status
  * @author FEDE
  */
-@Path("/status")
+@Path("V1/status")
 public class V1_status {
     
     private static final String api_version = "1";

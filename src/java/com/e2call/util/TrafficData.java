@@ -97,8 +97,8 @@ public class TrafficData {
                                             //create a Location Data for the incident found
                                             LocationData location_incident = new LocationData(incident_gps);
                                             location_incident.getLocationData();
-                                            System.out.println("LOCATION INCIDENT: " + location_incident.getRoadName());
-                                            System.out.println("LOCATION: " + location.getRoadName());
+                                            //System.out.println("LOCATION INCIDENT: " + location_incident.getRoadName());
+                                            //System.out.println("LOCATION: " + location.getRoadName());
                                             //if equals: the incident found is the same of the input incident
                                             //and i get the information about the road                                            
                                             if(location_incident.getRoadName().equals(location.getRoadName())){
