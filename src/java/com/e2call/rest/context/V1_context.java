@@ -4,7 +4,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.sql.*;
 import com.e2call.db.*;
-import com.e2call.util.GPS;
 import java.util.ArrayList;
 /**
  *
@@ -18,7 +17,8 @@ public class V1_context {
      * @return
      * @throws SQLException 
      */
-    @GET
+    @PUT
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_HTML)
     public String updateAllContext() throws SQLException{
         
@@ -68,7 +68,8 @@ public class V1_context {
      * @throws SQLException 
      */
     @Path("/{log_id}")
-    @GET
+    @PUT
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_HTML)
     public String updateContext(@PathParam("log_id") String log_id) throws SQLException{
         
